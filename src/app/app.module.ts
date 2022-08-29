@@ -10,22 +10,30 @@ import he from '@angular/common/locales/he';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxMapboxGLModule } from 'ngx-mapbox-gl';
+import { MapComponent } from './components/map/map.component';
+import { ZipcodeFinderComponent } from './containers/zipcode-finder/zipcode-finder.component';
+import { NgzorroModule } from './ngzorro.module';
+
 
 registerLocaleData(he);
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MapComponent,
+    ZipcodeFinderComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    BrowserAnimationsModule
-  ],
-  providers: [
-    { provide: NZ_I18N, useValue: he_IL }
+    BrowserAnimationsModule,
+    NgxMapboxGLModule.withConfig({
+      accessToken: 'pk.eyJ1IjoiYWhyb25iMzUiLCJhIjoiY2w3ZDdleWNlMWtvMjNub2w2eHJtd2lteiJ9.qvPGmM-MgDHU68F0w7JuJw',
+    }),
+    NgzorroModule
   ],
   bootstrap: [AppComponent]
 })

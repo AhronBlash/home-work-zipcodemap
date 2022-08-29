@@ -1,0 +1,21 @@
+<div class="container">
+    <section class="search-bar">
+        <form nz-form [nzLayout]="'inline'" (ngSubmit)="onSearch()">
+            <nz-form-item>
+                <nz-form-control [nzErrorTip]="combineTpl">
+                  <input nz-input [(ngModel)]="zipcodeInput" placeholder="Zip Code" [ngModelOptions]="{standalone: true}"/>
+                  <ng-template #combineTpl let-control>
+                    <ng-container *ngIf="control.hasError('pattern')">Invalid Zipcode</ng-container>
+                    <ng-container *ngIf="control.hasError('required')">Zipcode is required</ng-container>
+                  </ng-template>
+                </nz-form-control>
+              </nz-form-item>
+              <nz-form-item>
+                <nz-form-control >
+                  <button class="search-btn" nz-button nzType="primary">Search</button>
+                </nz-form-control>
+              </nz-form-item>
+            </form>
+    </section>
+    <app-map class="map" [loader]="isLoading" [geoJsonData]="zipcodePolygonArea" [popupContentValue]="weatherInTheArea"></app-map>
+</div>
