@@ -1,8 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { catchError, combineLatest, Observable, of, Subject, takeUntil } from 'rxjs';
 import { BoundariesService } from 'src/app/services/boundaries.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { WeatherService } from 'src/app/services/weather.service';
 
 @Component({
@@ -24,7 +26,8 @@ export class ZipcodeFinderComponent implements OnInit, OnDestroy {
 
   constructor(private readonly _boundariesService: BoundariesService,
     private readonly _weatherService: WeatherService,
-    private readonly _notificationService: NzNotificationService) { }
+    private readonly _notificationService: NotificationService
+    ) { }
 
   ngOnInit(): void {
   }
@@ -41,7 +44,7 @@ export class ZipcodeFinderComponent implements OnInit, OnDestroy {
       const zipcoeWeather$ = this._weatherService.getTheWeatherOfZipcodeArea(this.zipcodeInput);
 
       // Combine the two observabls results
-      combineLatest([zipcoeBounds$, zipcoeWeather$]).pipe(catchError(this.handleError.bind(this)), takeUntil(this.destroy$))
+      combineLatest([zipcoeBounds$, zipcoeWeather$]).pipe(takeUntil(this.destroy$))
         .subscribe(([geoJson, weather]) => {
           this.isLoading = false;
 
@@ -51,7 +54,7 @@ export class ZipcodeFinderComponent implements OnInit, OnDestroy {
           }
         })
     } else {
-      this._notificationService.error('Invalid Zipcode', 'Try again...', { nzPlacement: 'bottomLeft' });
+      this._notificationService.create('error', 'Invalid Zipcode', 'Try again...');
     }
   }
 
@@ -68,11 +71,5 @@ export class ZipcodeFinderComponent implements OnInit, OnDestroy {
       <h4>${content}</h4>
     `
   }
-
-  private handleError(): Observable<[any, any]> {
-    this._notificationService.error('Network Error', 'Please contact technical support', { nzPlacement: 'bottomLeft' });
-    return of([null, null]);
-  }
-
 
 }
