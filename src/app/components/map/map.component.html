@@ -1,0 +1,15 @@
+<mgl-map [ngClass]="{ loader: loader }" [style]="'mapbox://styles/mapbox/streets-v9'" [zoom]="[10]"
+    [center]="[-74.5, 40]" [fitBounds]="bounds" [fitBoundsOptions]="{ padding: boundsPadding }"
+    (mapLoad)="onMapLoad($event)">
+    <mgl-geojson-source id="zipcode" [data]="geoJsonData"></mgl-geojson-source>
+
+    <mgl-layer id="zipcode" type="fill" [source]="'zipcode'" [paint]="{
+        'fill-antialias': true,
+        'fill-color': 'rgba(0, 0, 0, 0.2)',
+        'fill-outline-color': 'rgba(0, 0, 0, 1.0)'}">
+    </mgl-layer>
+
+</mgl-map>
+<div class="loader" *ngIf="loader">
+    <nz-spin nzSimple nzTip="Loading..." [nzSize]="'large'"></nz-spin>
+</div>
